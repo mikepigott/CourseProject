@@ -158,6 +158,8 @@ for topic in topics:
 
 print("Created the word clouds.")
 
+print("Displaying the LDA model.  Please wait for it to appear in your browser.")
+
 # -- Display the LDA Model --
 lda_display = pyLDAvis.gensim.prepare(lda_model, corpus, dictionary, sort_topics=False)
 pyLDAvis.show(lda_display)
