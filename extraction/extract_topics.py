@@ -13,12 +13,13 @@ import gensim
 import wordcloud
 import pyLDAvis.gensim
 
-# USAGE: python extract_topics.py [number of topics (default: 10)] [corpus directory (default: ../data/compiled_bios/)] [output file (default: ../data/topics.dat)] [output word clouds directory (default: ../static/topics/)]
+# USAGE: python extract_topics.py [number of topics (default: 10)] [corpus directory (default: ../data/compiled_bios/)] [output file (default: ../data/topics.dat)] [output word clouds directory (default: ../static/topics/)] [LDA Model path (default: topics_lda_model.gensim)]
 
 num_topics = 10
 corpus_dir = "../data/compiled_bios/"
 topics_output_file = "../data/topics.dat"
 wordclouds_output_dir = "../static/topics"
+lda_model_output_file = "topics_lda_model.gensim"
 
 if len(sys.argv) > 1:
     num_topics = int(sys.argv[1])
@@ -32,7 +33,10 @@ if len(sys.argv) > 3:
 if len(sys.argv) > 4:
     wordclouds_output_dir = sys.argv[4]
 
-print("# of Topics: %d\nCorpus Directory: %s\nTopics OutputFile: %s\nWord Clouds Output Directory: %s" % (num_topics, corpus_dir, topics_output_file, wordclouds_output_dir))
+if len(sys.argv) > 5:
+    lda_model_output_file = sys.argv[5]
+
+print("# of Topics: %d\nCorpus Directory: %s\nTopics OutputFile: %s\nWord Clouds Output Directory: %s\nLDA Model Output Path: %s" % (num_topics, corpus_dir, topics_output_file, wordclouds_output_dir, lda_model_output_file))
 
 # -- Preprocess the Bios --
 
@@ -108,21 +112,35 @@ lda_model = gensim.models.ldamodel.LdaModel(corpus, num_topics = num_topics, id2
 
 print("Created the LDA model.")
 
+lda_model.save(lda_model_output_file)
+
 # -- Decide Topics for Profiles --
 print("Creating the topics file: %s" % topics_output_file)
 
 def convert_topics_to_list(corpus_file_name, topics):
-	list = [corpus_file_name]
-	for topic in topics:
-		list.append(str(topic[1]))
-	return list
+    list = [corpus_file_name]
+    topic_dict = {}
+    for topic in topics:
+        topic_dict[topic[0]] = topic[1]
+
+    for topic in range(num_topics):
+        list.append(str(topic_dict.get(topic, 0)))
+
+    return list
+
+count = 0
 
 with open(topics_output_file, "w") as o:
     for idx in range(len(text_data)):
         corpus_file_name = corpusfiles[idx]
         tokens = text_data[idx]
         new_doc_bow = dictionary.doc2bow(tokens)
-        o.write('\t'.join(convert_topics_to_list(corpus_file_name, lda_model.get_document_topics(new_doc_bow))) + str("\n")) 
+        topic_list = lda_model.get_document_topics(new_doc_bow)
+        o.write('\t'.join(convert_topics_to_list(corpus_file_name, topic_list)) + str("\n")) 
+
+        count = count + 1
+        if count % 250 == 0:
+            print("Processed %s, file %d of %d. Topic List: %s" % (corpus_file_name, count, len(text_data), topic_list))
 
 print("Created the topics file.")
 
