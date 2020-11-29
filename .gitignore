@@ -4,3 +4,4 @@ data/idx
 *.swp
 .vscode/
 cloud-init.txt
+**/.DS_Store
