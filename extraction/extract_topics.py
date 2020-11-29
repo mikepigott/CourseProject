@@ -77,10 +77,13 @@ def prepare_text_for_lda(text):
 
 text_data = []
 
-corpusfiles = [f for f in listdir(corpus_dir) if isfile(join(corpus_dir, f))]
+corpusfiles = [f for f in listdir(corpus_dir) if isfile(join(corpus_dir, f)) and f.endswith(".txt") and not f.startswith("dataset-full-corpus") ]
+corpusfiles.sort()
+
+print("Reading the corpus files.")
+count = 0
 
 for file in corpusfiles:
-    print(file)
     with open(join(corpus_dir, file)) as inf:
         words = []
         for line in inf:
@@ -89,23 +92,44 @@ for file in corpusfiles:
         tokens = prepare_text_for_lda(' '.join(words))
         text_data.append(tokens)
 
-        if random.random() > .99:
-            print(tokens)
+        count = count + 1
+        if count % 250 == 0:
+            print("Processed %s, file %d of %d." % (file, count, len(corpusfiles)))
+
+print("Processed %d files of %d." % (len(corpusfiles), len(corpusfiles)))
 
 # -- Generate the LDA Model
+print("Creating the LDA model with %d topics." % num_topics)
+
 dictionary = corpora.Dictionary(text_data)
 corpus = [dictionary.doc2bow(text) for text in text_data]
 
 lda_model = gensim.models.ldamodel.LdaModel(corpus, num_topics = num_topics, id2word=dictionary, passes=15)
 
+print("Created the LDA model.")
+
 # -- Decide Topics for Profiles --
+print("Creating the topics file: %s" % topics_output_file)
+
+def convert_topics_to_list(corpus_file_name, topics):
+	list = [corpus_file_name]
+	for topic in topics:
+		list.append(str(topic[1]))
+	return list
+
 with open(topics_output_file, "w") as o:
-    for tokens in text_data:
+    for idx in range(len(text_data)):
+        corpus_file_name = corpusfiles[idx]
+        tokens = text_data[idx]
         new_doc_bow = dictionary.doc2bow(tokens)
-        o.write('\t'.join(convert_topics_to_list(ldamodel.get_document_topics(new_doc_bow))) + str("\n")) 
+        o.write('\t'.join(convert_topics_to_list(corpus_file_name, lda_model.get_document_topics(new_doc_bow))) + str("\n")) 
+
+print("Created the topics file.")
 
 # -- Generate the Word Clouds --
-topics = ldamodel.show_topics(num_topics=num_topics, num_words=25, formatted=False)
+print("Creating the word clouds: %s" % wordclouds_output_dir)
+
+topics = lda_model.show_topics(num_topics=num_topics, num_words=25, formatted=False)
 
 for topic in topics:
 	topic_dict = {}
@@ -113,6 +137,8 @@ for topic in topics:
 		topic_dict[record[0]] = record[1]
 	word_cloud = wordcloud.WordCloud().generate_from_frequencies(topic_dict)
 	word_cloud.to_file(wordclouds_output_dir + "/" + str(topic[0]) + ".png")
+
+print("Created the word clouds.")
 
 # -- Display the LDA Model --
 lda_display = pyLDAvis.gensim.prepare(lda_model, corpus, dictionary, sort_topics=False)
