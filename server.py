@@ -83,7 +83,7 @@ def search():
     depts = [index.metadata(res[0]).get('department') for res in results]
     fac_names = [index.metadata(res[0]).get('fac_name') for res in results]
     fac_urls = [index.metadata(res[0]).get('fac_url') for res in results]
-    topics = [idx % 10 for idx in range(len(results))]
+    topics = [index.metadata(res[0]).get('topic') or 0 for res in results]
 
     previews = _get_doc_previews(doc_names,querytext)
     emails = [index.metadata(res[0]).get('email') for res in results]
