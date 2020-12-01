@@ -13,28 +13,28 @@ import gensim
 import wordcloud
 import pyLDAvis.gensim
 
-# USAGE: python extract_topics.py [number of topics (default: 10)] [corpus directory (default: ../data/compiled_bios/)] [output file (default: ../data/topics.dat)] [output word clouds directory (default: ../static/topics/)] [LDA Model path (default: topics_lda_model.gensim)]
+# USAGE: python extract_topics.py [number of topics (default: 10)] [LDA Model path (default: topics_lda_model.gensim)] [corpus directory (default: ../data/compiled_bios/)] [output file (default: ../data/topics.dat)] [output word clouds directory (default: ../static/topics/)]
 
 num_topics = 10
+lda_model_output_file = "topics_lda_model.gensim"
 corpus_dir = "../data/compiled_bios/"
 topics_output_file = "../data/topics.dat"
 wordclouds_output_dir = "../static/topics"
-lda_model_output_file = "topics_lda_model.gensim"
 
 if len(sys.argv) > 1:
     num_topics = int(sys.argv[1])
 
 if len(sys.argv) > 2:
-    corpus_dir = sys.argv[2]
+    lda_model_output_file = sys.argv[2]
 
 if len(sys.argv) > 3:
-    topics_output_file = sys.argv[3]
+    corpus_dir = sys.argv[3]
 
 if len(sys.argv) > 4:
-    wordclouds_output_dir = sys.argv[4]
+    topics_output_file = sys.argv[4]
 
 if len(sys.argv) > 5:
-    lda_model_output_file = sys.argv[5]
+    wordclouds_output_dir = sys.argv[5]
 
 print("# of Topics: %d\nCorpus Directory: %s\nTopics OutputFile: %s\nWord Clouds Output Directory: %s\nLDA Model Output Path: %s" % (num_topics, corpus_dir, topics_output_file, wordclouds_output_dir, lda_model_output_file))
 
