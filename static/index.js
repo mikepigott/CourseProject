@@ -43,7 +43,7 @@ var docDiv = (doc) => {
                         <br>
                     </div>
                     <div style="width: 50%; float:right">
-                        <img src="static/topics/${topic}.png" alt="Topic ${topic}">
+                        <img onClick="fetchTopics(${topic});" src="static/topics/${topic}.png" alt="Topic ${topic}">
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@ var docDiv = (doc) => {
                         <br>
                     </div>
                     <div style="width: 50%; float:right">
-                        <img src="static/topics/${topic}.png" alt="Topic ${topic}">
+                        <img onClick="fetchTopics(${topic});" src="static/topics/${topic}.png" alt="Topic ${topic}">
                     </div>
                 </div>
             </div>
@@ -128,6 +128,33 @@ var doSearch = function () {
     }
 }
 
+var topicDiv = (topic) => {
+    return (`<div class="topic"><img onClick="fetchTopics(${topic});" src="static/topics/${topic}.png" alt="Topic ${topic}"></div>`);
+};
+
+var fetchTopics = (topic) => {
+    fetch(`http://localhost:8095/topic?topic=${topic}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(response => {
+        response.json().then(data => {
+            const docs = data.docs;
+            $("#docs-div").empty();
+
+            docs.forEach(doc => {
+
+                $("#docs-div").append(
+                    docDiv(doc)
+                );
+
+                $("#loadMoreButton").css("display", "none")
+            });
+        });
+    });
+}
+
 $(window).on("resize", function () {
     $(document.body).css("margin-top", $(".navbar").height() + 5);
     var width = $(".select2-container").width()
@@ -162,6 +189,25 @@ window.onload = function () {
     selected_loc_filters = locs.slice()
     $(window).trigger('resize');
 
+    fetch("http://localhost:8095/topics", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(response => {
+        response.json().then(data => {
+            const topics = data.topics;
+            $("#topics-div").empty();
+
+            topics.forEach(topic => {
+
+                $("#topics-div").append(
+                    topicDiv(topic)
+                );
+
+            });
+        });
+    });
 };
 
 function toggleFilter() {

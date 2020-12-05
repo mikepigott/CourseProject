@@ -4,7 +4,8 @@
         "datasetpath": "./data/compiled_bios/",
         "searchconfig": "./data/compiled_bios/config.toml",
         "unispath": "./data/filter_data/unis.json",
-        "locspath": "./data/filter_data/locs.json"
+        "locspath": "./data/filter_data/locs.json",
+        "topicsdir": "./data/topics/"
     },
     "production": {
         "rootpath": "/data",

@@ -1,4 +1,5 @@
 import os,codecs,json
+import collections
 
 def create_topics_list(topics_path):
 	topics_list = []
@@ -21,8 +22,48 @@ def create_topics_list(topics_path):
 
 	return topics_list
 
+def _sort_by_topic_relevance(record):
+	return record[-1]
 
-def main(dir_,out_file1,out_file2,dept_path,uni_path,names_path,url_path,loc_path,email_path,topics_path,filter_file1,filter_file2):
+def create_browsable_topics(topics_path, unis, depts, corrected_names, urls, locs, emails, topics_list, topics_json_dir):
+	docs_by_topic = collections.defaultdict(list)
+
+	# Construct a dictionary of relevant documents by topic.
+	with open(topics_path, 'r') as tf:
+		doc_num = 0
+		for line in tf:
+			topic_list = line.strip().split('\t')
+			for topic_idx in range(1, len(topic_list)):
+				topic_relevance = float(topic_list[topic_idx])
+				if topic_relevance > 0:
+					docs_by_topic[topic_idx - 1].append([
+						topic_list[0],                                    # Document Name
+						'Relevance: ' + str(topic_relevance * 100) + '%', # Document Preview
+						emails[doc_num],                                  # Email
+						unis[doc_num],                                    # University
+						depts[doc_num],                                   # Department
+						corrected_names[doc_num],                         # Faculty Name
+						urls[doc_num],                                    # Faculty URL
+						locs[doc_num].split()[0],                         # State
+						locs[doc_num].split()[1],                         # Country
+						topics_list[doc_num],                             # Primary Topic
+						topic_relevance                                   # Current Topic Relevance
+					])
+			doc_num = doc_num + 1
+
+	for topic_num in docs_by_topic.keys():
+		# Sort the per-topic documents by relevance, descending.
+		relevant_docs = docs_by_topic[topic_num] 
+		relevant_docs.sort(reverse=True, key=_sort_by_topic_relevance)
+
+		print("Topic %d document 0 relevance index: %f" % (topic_num, _sort_by_topic_relevance(relevant_docs[0])))
+
+		# Write the documents as JSON search results.
+		json.dump({"docs": relevant_docs}, open(topics_json_dir + str(topic_num) + '.json', 'w'))
+
+	return
+
+def main(dir_,out_file1,out_file2,dept_path,uni_path,names_path,url_path,loc_path,email_path,topics_path,filter_file1,filter_file2,topics_json_dir):
 
 	with open(uni_path,'r') as f:
 		unis = f.readlines()
@@ -98,10 +139,11 @@ def main(dir_,out_file1,out_file2,dept_path,uni_path,names_path,url_path,loc_pat
 	json.dump(unis_dict,open(filter_file1,'w'))
 	json.dump(locs_dict,open(filter_file2,'w'))
 
+	create_browsable_topics(topics_path, unis, depts, corrected_names, urls, locs, emails, topics_list, topics_json_dir)
 	
 
 if __name__ == '__main__':
-	main('./data/compiled_bios','./data/compiled_bios/dataset-full-corpus.txt','./data/compiled_bios/metadata.dat','./data/depts','./data/unis','./data/names.txt','./data/urls','./data/location','./data/emails','./data/topics.dat','./data/filter_data/unis.json','./data/filter_data/locs.json')
+	main('./data/compiled_bios','./data/compiled_bios/dataset-full-corpus.txt','./data/compiled_bios/metadata.dat','./data/depts','./data/unis','./data/names.txt','./data/urls','./data/location','./data/emails','./data/topics.dat','./data/filter_data/unis.json','./data/filter_data/locs.json', './data/topics/')
 
 
 
