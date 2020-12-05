@@ -105,6 +105,7 @@ Output:
 * `data/compiled_bios/metadata.dat`
 * `data/filter_data/unis.json`
 * `data/filter_data/locs.json`
+* `data/topics/*.json`
 
 Example usage:
 ```sh
@@ -118,3 +119,15 @@ python2 write_file_names.py
 rm -rf data/FacultyDataset
 gunicorn server:app -b 127.0.0.1:8095 # or your favorite way of starting the server
 ```
+
+## Browsing Topics
+
+When visiting http://localhost:8095 for the first time, you will be presented with a set of word clouds, one for each topic.  Each of these is clickable, and will fetch all of the documents associated with that topic, in decreasing order of relevance.
+
+You will also be able to click the topic word-cloud in the search results to view the same data.
+
+Searching will work the same.
+
+### Topic Result Generation
+
+These search resutls were generated as part of the `write_file_names.py` script, and deposited in the `data/topics/` directory.  Each JSON file is a list of documents in the format returned by the search engine.  When a topic word-cloud is clicked on, the server fetches the file from disk and returns it, as-is, back to the browser.  The JavaScript code then converts the JSON to the list of search results viewable on the screen.
