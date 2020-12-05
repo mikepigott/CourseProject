@@ -26,7 +26,7 @@ def _sort_by_topic_relevance(record):
 	return record[-1]
 
 def create_browsable_topics(topics_path, unis, depts, corrected_names, urls, locs, emails, topics_list, topics_json_dir):
-	docs_by_topic = collections.defaultdict([])
+	docs_by_topic = collections.defaultdict(list)
 
 	# Construct a dictionary of relevant documents by topic.
 	with open(topics_path, 'r') as tf:
@@ -34,11 +34,11 @@ def create_browsable_topics(topics_path, unis, depts, corrected_names, urls, loc
 		for line in tf:
 			topic_list = line.strip().split('\t')
 			for topic_idx in range(1, len(topic_list)):
-				topic_relevance = float(topic_list[idx])
+				topic_relevance = float(topic_list[topic_idx])
 				if topic_relevance > 0:
 					docs_by_topic[topic_idx - 1].append([
 						topic_list[0],                      # Document Name
-						''                                  # Document Preview (none)
+						'',                                 # Document Preview (none)
 						emails[doc_num],                    # Email
 						unis[doc_num],                      # University
 						depts[doc_num],                     # Department
@@ -47,17 +47,20 @@ def create_browsable_topics(topics_path, unis, depts, corrected_names, urls, loc
 						locs[doc_num].split()[0],           # State
 						locs[doc_num].split()[1],           # Country
 						emails[doc_num],                    # Email
-						topic_list[doc_num],                # Primary Topic
+						topics_list[doc_num],               # Primary Topic
 						topic_relevance                     # Current Topic Relevance
 					])
 			doc_num = doc_num + 1
 
 	for topic_num in docs_by_topic.keys():
 		# Sort the per-topic documents by relevance, descending.
-		relevant_docs = docs_by_topic[topic_num].sort(reverse=True, key=_sort_by_topic_relevance)
+		relevant_docs = docs_by_topic[topic_num] 
+		relevant_docs.sort(reverse=True, key=_sort_by_topic_relevance)
+
+		print("Topic %d document 0 relevance index: %f" % (topic_num, _sort_by_topic_relevance(relevant_docs[0])))
 
 		# Write the documents as JSON search results.
-		json.dump({"docs": relevant_docs}, open(topics_json_dir + str(topic_num) + '.json'))
+		json.dump({"docs": relevant_docs}, open(topics_json_dir + str(topic_num) + '.json', 'w'))
 
 	return
 
