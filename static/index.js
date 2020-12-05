@@ -129,11 +129,7 @@ var doSearch = function () {
 }
 
 var topicDiv = (topic) => {
-    return (`
-        <div class="topic">
-            <img src="static/topics/${topic}.png" alt="Topic ${topic}">
-        </div>
-    `);
+    return (`<div class="topic"><img src="static/topics/${topic}.png" alt="Topic ${topic}"></div>`);
 };
 
 $(window).on("resize", function () {
