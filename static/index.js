@@ -43,7 +43,7 @@ var docDiv = (doc) => {
                         <br>
                     </div>
                     <div style="width: 50%; float:right">
-                        <img src="static/topics/${topic}.png" alt="Topic ${topic}">
+                        <img onClick="fetchTopics(${topic});" src="static/topics/${topic}.png" alt="Topic ${topic}">
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@ var docDiv = (doc) => {
                         <br>
                     </div>
                     <div style="width: 50%; float:right">
-                        <img src="static/topics/${topic}.png" alt="Topic ${topic}">
+                        <img onClick="fetchTopics(${topic});" src="static/topics/${topic}.png" alt="Topic ${topic}">
                     </div>
                 </div>
             </div>
