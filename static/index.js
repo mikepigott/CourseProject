@@ -129,8 +129,31 @@ var doSearch = function () {
 }
 
 var topicDiv = (topic) => {
-    return (`<div class="topic"><img src="static/topics/${topic}.png" alt="Topic ${topic}"></div>`);
+    return (`<div class="topic"><img onClick="fetchTopics(${topic});" src="static/topics/${topic}.png" alt="Topic ${topic}"></div>`);
 };
+
+var fetchTopics = (topic) => {
+    fetch(`http://localhost:8095/topic?topic=${topic}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(response => {
+        response.json().then(data => {
+            const docs = data.docs;
+            $("#docs-div").empty();
+
+            docs.forEach(doc => {
+
+                $("#docs-div").append(
+                    docDiv(doc)
+                );
+
+                $("#loadMoreButton").css("display", "none")
+            });
+        });
+    });
+}
 
 $(window).on("resize", function () {
     $(document.body).css("margin-top", $(".navbar").height() + 5);

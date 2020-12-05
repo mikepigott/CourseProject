@@ -46,7 +46,6 @@ def create_browsable_topics(topics_path, unis, depts, corrected_names, urls, loc
 						urls[doc_num],                                    # Faculty URL
 						locs[doc_num].split()[0],                         # State
 						locs[doc_num].split()[1],                         # Country
-						emails[doc_num],                                  # Email
 						topics_list[doc_num],                             # Primary Topic
 						topic_relevance                                   # Current Topic Relevance
 					])
