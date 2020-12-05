@@ -130,4 +130,4 @@ Searching will work the same.
 
 ### Topic Result Generation
 
-These search resutls were generated as part of the `write_file_names.py` script, and deposited in the `data/topics/` directory.  Each JSON file is a list of documents in the format returned by the search engine.  When a topic word-cloud is clicked on, the server fetches the file from disk and returns it, as-is, back to the browser.  The JavaScript code then converts the JSON to the list of search results viewable on the screen.
+These search results were generated as part of the `write_file_names.py` script, and deposited in the `data/topics/` directory.  Each JSON file is a list of documents in the format returned by the search engine.  When a topic word-cloud is clicked on, the server fetches the file from disk and returns it, as-is, back to the browser.  The JavaScript code then converts the JSON to the list of search results viewable on the screen.
