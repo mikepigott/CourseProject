@@ -141,6 +141,10 @@ def get_topics():
         "topics": topic_list
     })
 
+@app.route("/topic")
+def get_topic():
+    return jsonify(json.loads(open(app.topicsdir + request.args.get('topic') + '.json','r').read()))
+
 def _get_doc_previews(doc_names,querytext):
     return list(map(lambda d: _get_preview(d,querytext), doc_names))
 
