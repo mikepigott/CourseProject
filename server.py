@@ -16,6 +16,7 @@ app.dataenv = dataconfig[environ]
 app.rootpath = dataconfig[environ]["rootpath"]
 app.datasetpath = dataconfig[environ]['datasetpath']
 app.searchconfig = dataconfig[environ]['searchconfig']
+app.topicsdir = dataconfig[environ]['topicsdir']
 index = metapy.index.make_inverted_index(app.searchconfig)
 query = metapy.index.Document()
 uni_list = json.loads(open(dataconfig[environ]["unispath"],'r').read())["unis"]
@@ -125,6 +126,20 @@ def set_ranker():
         f.close()
 
     return "200"
+
+def _get_topic_number(topic_file_name):
+    return topic_file_name.split('.')[0]
+
+@app.route("/topics")
+def get_topics():
+    topicsfiles = [f for f in os.listdir(app.topicsdir) if os.path.isfile(os.path.join(app.topicsdir, f)) and f.endswith(".json")]
+    topicsfiles.sort()
+
+    topic_list = map(_get_topic_number, topicsfiles)
+
+    return jsonify({
+        "topics": topic_list
+    })
 
 def _get_doc_previews(doc_names,querytext):
     return list(map(lambda d: _get_preview(d,querytext), doc_names))

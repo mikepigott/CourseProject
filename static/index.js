@@ -128,6 +128,16 @@ var doSearch = function () {
     }
 }
 
+var topicDiv = (topic) => {
+    return (`
+        <div class="card">
+            <div class="card-body">
+                <img src="static/topics/${topic}.png" alt="Topic ${topic}">
+            </div>
+        </div>
+    `);
+};
+
 $(window).on("resize", function () {
     $(document.body).css("margin-top", $(".navbar").height() + 5);
     var width = $(".select2-container").width()
@@ -162,6 +172,25 @@ window.onload = function () {
     selected_loc_filters = locs.slice()
     $(window).trigger('resize');
 
+    fetch("http://localhost:8095/topics", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then(response => {
+        response.json().then(data => {
+            const topics = data.topics;
+            $("#topics-div").empty();
+
+            docs.forEach(doc => {
+
+                $("#topics-div").append(
+                    topicDiv(doc)
+                );
+
+            });
+        });
+    });
 };
 
 function toggleFilter() {
