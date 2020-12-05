@@ -130,10 +130,8 @@ var doSearch = function () {
 
 var topicDiv = (topic) => {
     return (`
-        <div class="card">
-            <div class="card-body">
-                <img src="static/topics/${topic}.png" alt="Topic ${topic}">
-            </div>
+        <div class="topic">
+            <img src="static/topics/${topic}.png" alt="Topic ${topic}">
         </div>
     `);
 };
@@ -182,10 +180,10 @@ window.onload = function () {
             const topics = data.topics;
             $("#topics-div").empty();
 
-            docs.forEach(doc => {
+            topics.forEach(topic => {
 
                 $("#topics-div").append(
-                    topicDiv(doc)
+                    topicDiv(topic)
                 );
 
             });
