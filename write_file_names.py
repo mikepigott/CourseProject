@@ -37,18 +37,18 @@ def create_browsable_topics(topics_path, unis, depts, corrected_names, urls, loc
 				topic_relevance = float(topic_list[topic_idx])
 				if topic_relevance > 0:
 					docs_by_topic[topic_idx - 1].append([
-						topic_list[0],                      # Document Name
-						'',                                 # Document Preview (none)
-						emails[doc_num],                    # Email
-						unis[doc_num],                      # University
-						depts[doc_num],                     # Department
-						corrected_names[doc_num],           # Faculty Name
-						urls[doc_num],                      # Faculty URL
-						locs[doc_num].split()[0],           # State
-						locs[doc_num].split()[1],           # Country
-						emails[doc_num],                    # Email
-						topics_list[doc_num],               # Primary Topic
-						topic_relevance                     # Current Topic Relevance
+						topic_list[0],                                    # Document Name
+						'Relevance: ' + str(topic_relevance * 100) + '%', # Document Preview (none)
+						emails[doc_num],                                  # Email
+						unis[doc_num],                                    # University
+						depts[doc_num],                                   # Department
+						corrected_names[doc_num],                         # Faculty Name
+						urls[doc_num],                                    # Faculty URL
+						locs[doc_num].split()[0],                         # State
+						locs[doc_num].split()[1],                         # Country
+						emails[doc_num],                                  # Email
+						topics_list[doc_num],                             # Primary Topic
+						topic_relevance                                   # Current Topic Relevance
 					])
 			doc_num = doc_num + 1
 
