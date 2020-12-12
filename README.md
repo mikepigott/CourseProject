@@ -56,6 +56,13 @@ nltk.download('stopwords')
 
 ### Email Extractor
 
+The following (Python 3.x) modules are needed to run the email extractor:
+
+* `os`
+* `codecs`
+* `re`
+
+
 ## Generating Topics
 
 Regenerating the LDA topic model, word clouds, and index will require the following steps:
