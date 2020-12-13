@@ -3,8 +3,8 @@ import re
 import nltk
 from nltk.tag.stanford import StanfordNERTagger
 
-jar = './stanford-ner-2018-10-16/stanford-ner.jar'
-model = './stanford-ner-2018-10-16/classifiers/4_class_2020_11.gz'
+jar = '../stanford-ner-2018-10-16/stanford-ner.jar'
+model = '../stanford-ner-2018-10-16/classifiers/4_class_2020_11.gz'
 
 
 # Prepare NER tagger with english model
@@ -12,7 +12,7 @@ ner_tagger = StanfordNERTagger(model, jar, encoding='utf8')
 
 for i in range(6524):
     indexOfFile = i
-    with open('data/compiled_bios/' + str(i) + '.txt', 'r') as file:
+    with open('../data/compiled_bios/' + str(i) + '.txt', 'r') as file:
         data = file.read().replace('\n', '')
         isOutOfIndex = False
         dic = {}
@@ -50,7 +50,7 @@ for i in range(6524):
                     fullName = fullName.strip()
                     dic[fullName] = dic.get(fullName, 0) + 1
         if (isOutOfIndex == True):
-            f = open("names.txt", "a")
+            f = open("../data/names.txt", "a")
             f.write(res + "\n")
             f.close()
         if (isOutOfIndex == False):
@@ -86,7 +86,7 @@ for i in range(6524):
                     res = ""
             # print(cleanedUpRes)
             
-            f = open("names.txt", "a")
+            f = open("../data/names.txt", "a")
             f.write(res + "\n")
             f.close()
     file.close()
