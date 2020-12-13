@@ -76,7 +76,7 @@ for i in range(6524):
                 if item[1] == highestFrequency:
                     if len(item[0]) > len(res):
                         res = item[0]
-            print(dic)
+            # print(dic)
             # print(res)
             # print(indexOfFile)
             # Cleanup phase
