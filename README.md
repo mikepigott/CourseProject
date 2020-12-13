@@ -8,6 +8,9 @@ The site should be available at http://localhost:8095/
 
 > *Note:* This server requires Python 2.x.  For running on a Mac with both Python 2.7 and Python 3.x, see the `start_expertsearch.sh` script.
 
+>If you are using Windows OS, please install Windows Subsystem for Linux (WSL) and install all the required modules. You can then run the gunicorn command specified above.
+You could also use Docker or Cygwin to run the code on Windows OS. 
+
 ## Installation
 
 ### Python
@@ -53,6 +56,13 @@ nltk.download('stopwords')
 ### Name Extractor
 
 ### Email Extractor
+
+The following (Python 3.x) modules are needed to run the email extractor:
+
+* `os`
+* `codecs`
+* `re`
+
 
 ## Generating Topics
 
