@@ -143,7 +143,7 @@ def main(dir_,out_file1,out_file2,dept_path,uni_path,names_path,url_path,loc_pat
 	
 
 if __name__ == '__main__':
-	main('./data/compiled_bios','./data/compiled_bios/dataset-full-corpus.txt','./data/compiled_bios/metadata.dat','./data/depts','./data/unis','./data/names.txt','./data/urls','./data/location','./data/emails','./data/topics.dat','./data/filter_data/unis.json','./data/filter_data/locs.json', './data/topics/')
+	main('./data/compiled_bios','./data/compiled_bios/dataset-full-corpus.txt','./data/compiled_bios/metadata.dat','./data/depts','./data/unis','./data/new_names.txt','./data/urls','./data/location','./data/emails2','./data/topics.dat','./data/filter_data/unis.json','./data/filter_data/locs.json', './data/topics/')
 
 
 
