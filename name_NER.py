@@ -10,9 +10,9 @@ model = './stanford-ner-2018-10-16/classifiers/4_class_2020_11.gz'
 # Prepare NER tagger with english model
 ner_tagger = StanfordNERTagger(model, jar, encoding='utf8')
 
-for i in range(1):
+for i in range(6524):
     indexOfFile = i
-    with open('data/compiled_bios/' + str(93) + '.txt', 'r') as file:
+    with open('data/compiled_bios/' + str(i) + '.txt', 'r') as file:
         data = file.read().replace('\n', '')
         isOutOfIndex = False
         dic = {}
