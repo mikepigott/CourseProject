@@ -1,0 +1,8 @@
+venv/
+azure/
+data/idx
+*.swp
+.vscode/
+cloud-init.txt
+**/.DS_Store
+topics_lda_model.gensim*
