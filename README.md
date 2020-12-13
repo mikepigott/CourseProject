@@ -54,6 +54,12 @@ nltk.download('stopwords')
 ```
 
 ### Name Extractor
+The provided NER script is installed in name_NER.py. You can simply run python name_NER.py to retreieve 
+names from the bio files or any files if you want
+
+new_names.txt stores all names extracted from bio files. It's eliminate all names are not present fully in the articles, having high weight on retrieving full name of the article rather than capture any names seen in the article
+
+The script itself has high precision more than recall on retrieving names
 
 ### Email Extractor
 
